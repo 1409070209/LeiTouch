@@ -1,7 +1,11 @@
 class MathUtil {
-    static angleOfTwoPoint(startX,startY,endX,endY){
+    static angleOfTwoPoint(start  ,end){
         //计算两个点的角度，不要问我为什么要加270，也不要研究为什么开发numToAngle函数
         const PI = Math.PI;
+        const startX = start.x;
+        const startY = start.y;
+        const endX = end.x;
+        const endY = end.y;
         const angle = Math.atan2(endX-startX,endY-startY)*180/PI;
         return MathUtil.numToAngle(angle+270);
     }
@@ -23,10 +27,12 @@ class MathUtil {
         if (low < high) {
             return angle > low && angle < high ;
         } else {
-            console.log(angle,low,high);
             return (angle > low && angle < (high+360))
                 || (angle > (low-360) && angle < high);
         }
+    }
+    static distanceOfTwoPoint(s , e) {
+        return Math.sqrt((e.x-s.x)*(e.x-s.x)+(e.y-s.y)*(e.y-s.y));
     }
 }
 export default MathUtil;

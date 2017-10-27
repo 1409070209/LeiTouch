@@ -1,46 +1,55 @@
+import TouchEventUtil from '../Util/TouchEventUtil'
+import MathUtil from '../Util/MathUtil'
+
 const delayTime = 300;
 const offsetLength = 100;
 
 class DoubleClick {
-    _startX
-    _startY
-    _endX
-    _endY
+    _start = {
+        x : 0,
+        y : 0,
+        time : +new Date()
+    }
+    _end = {
+        x : 0,
+        y : 0,
+        time : +new Date()
+    }
     _htmlElement
 
-    _delayTime
-    _offsetLength
-    _startTime
+    _delayTime = delayTime
+    _offsetLength = offsetLength
     _isDoubleClick
-    registerEvent(type , fun) {
-        this._htmlElement.addEventListener(type,fun);
-    }
+
     runEvent(event){
-        event();
+        if (this._offsetLength >= MathUtil.distanceOfTwoPoint(this._start,this._end)) {
+            event();
+        }
     }
 
     constructor (htmlElement,event){
-        this._startX = this._startY = this._endX = this._endY = 0;
-        this._startTime = +new Date();
         this._isDoubleClick = false;
         this._htmlElement = htmlElement;
-        this._offsetLength = offsetLength;
-        this._delayTime = delayTime;
 
-        this.registerEvent('touchstart',(e) => {
+        TouchEventUtil.registerEvent(this._htmlElement,'touchstart',(e) => {
             e.preventDefault();
             const finger = e.changedTouches[0];
             if (!this._isDoubleClick) {
-                this._startX = finger.clientX;
-                this._startY = finger.clientY;
                 this._isDoubleClick = true;
-                this._startTime = e.timeStamp;
+                this._start = {
+                    x : finger.clientX,
+                    y : finger.clientY,
+                    time : e.timeStamp
+                }
+
                 setTimeout(() => {
                     this._isDoubleClick = false;
                 },this._delayTime)
             } else {
-                this._endX = finger.clientX;
-                this._endY = finger.clientY;
+                this._end = {
+                    x : finger.clientX,
+                    y : finger.clientY
+                }
                 this.runEvent(event);
             }
         });
