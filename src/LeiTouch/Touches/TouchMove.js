@@ -1,6 +1,7 @@
 /*
  * TODO 已解决双指点击混淆单指移动的BUG
  * TODO 没有解决双指移动事件与本类(单指移动)混淆
+ * TODO 应该将TouchMove和TwoTouchMove合并在一起，可以有效避免事件重复
  */
 import MathUtil from '../Util/MathUtil'
 import TouchEventUtil from '../Util/TouchEventUtil'
@@ -36,9 +37,8 @@ class TouchMove {
     static TOUCH_UP = 90;
     static TOUCH_DOWN = 270;
     runEvent(direction , event , e) {
-        console.log(TouchEventUtil.isOneFinger(e))
         if (!TouchEventUtil.isOneFinger(e)) {
-            console.log('不是一个手指')
+            alert('不是一个手指')
             return;
         }
         if (this._end.time-this._thisPoint.time >= this._minMoveTime) {
